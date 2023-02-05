@@ -57,9 +57,7 @@ function Bookmarks({
           <LinkText>Home</LinkText>
         </FooterLink>
         <FooterLink
-          href={`/${normalizeDate(conferenceDays[0])}/${normalizeRooms(
-            conferenceRooms[0]
-          )}`}
+          href={`/${normalizeDate(conferenceDays[0])}/${conferenceRooms[0].slug}`}
         >
           <CalendarIcon />
           <LinkText>Schedule</LinkText>

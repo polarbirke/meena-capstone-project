@@ -3,7 +3,7 @@ function normalizeDate(date) {
 }
 
 function normalizeRooms(room) {
-  return room.toLowerCase().replaceAll(" ", "-");
+  return room.name.toLowerCase().replaceAll(" ", "-");
 }
 
 function dateFromNormalizedString(date) {

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
-import { normalizeDate, normalizeRooms } from "../helpers/normalize";
+import { normalizeDate } from "../helpers/normalize";
 import { BsCalendar4Week, BsJournalBookmarkFill } from "react-icons/bs";
 import Image from "next/image";
 
@@ -32,9 +32,7 @@ function LandingPage({ conferenceDays, conferenceRooms }) {
 
         <LinkWrapper>
           <NavigationLink
-            href={`/${normalizeDate(conferenceDays[0])}/${normalizeRooms(
-              conferenceRooms[0]
-            )}`}
+            href={`/${normalizeDate(conferenceDays[0])}/${conferenceRooms[0].slug}`}
           >
             <StyledCalendarIcon />
             Schedule
