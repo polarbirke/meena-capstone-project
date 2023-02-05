@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { BookmarkActive, BookmarkInactive } from "./StyledBookmarks";
+import { VisuallyHidden } from "./StyledVisuallyHidden";
 import { normalizeRooms } from "../helpers/normalize";
 
 function TalkCard({ talk, onBookmarkToggle }) {
@@ -22,13 +23,13 @@ function TalkCard({ talk, onBookmarkToggle }) {
               )}...`}</StyledTalkTitle>
             </StyledTalkLink>
             <Button
-              aria-label="toggle bookmark button"
               type={"button"}
               onClick={() => {
                 onBookmarkToggle(talk.id);
               }}
             >
               {talk.isBookmarked ? <BookmarkActive /> : <BookmarkInactive />}
+              <VisuallyHidden>Toggle bookmark</VisuallyHidden>
             </Button>
           </CardHeader>
 
