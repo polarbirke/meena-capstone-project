@@ -1,21 +1,22 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { BookmarkActive, BookmarkInactive } from "./StyledBookmarks";
-import { normalizeRooms } from "../helpers/normalize";
+import { rooms } from "../helpers/data";
+import { getRoomById } from "../helpers/get";
 
 function TalkCard({ talk, onBookmarkToggle }) {
   const date = talk.date.replaceAll(".", "-");
-  const room = normalizeRooms(talk.room);
+  const roomSlug = getRoomById(rooms, talk.room).slug;
 
   return (
-    <TalkItem>
+    <TalkItem key={talk.id}>
       <StyledTalkTime>{talk.time}</StyledTalkTime>
 
       <StyledCard>
         <SessionWrapper style={{ background: talk.session.bgColor }} />
         <MainCardContainer>
           <CardHeader>
-            <StyledTalkLink href={`/${date}/${room}/talks/${talk.id}`}>
+            <StyledTalkLink href={`/${date}/${roomSlug}/talks/${talk.id}`}>
               <StyledTalkTitle>{`${talk.title.substring(
                 0,
                 20

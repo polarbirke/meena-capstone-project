@@ -9,6 +9,7 @@ import {
 import styled from "styled-components";
 import { css } from "styled-components";
 import { dateFromNormalizedString } from "../../../../helpers/normalize";
+import { getRoomBySlug } from "../../../../helpers/get";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import {
   BookmarkActive,
@@ -17,7 +18,7 @@ import {
 import { TfiEmail } from "react-icons/tfi";
 import { useState } from "react";
 
-function TalkDetails({ talks, onBookmarkToggle }) {
+function TalkDetails({ conferenceRooms, talks, onBookmarkToggle }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { date, room, id } = router.query;
@@ -27,8 +28,6 @@ function TalkDetails({ talks, onBookmarkToggle }) {
     authors,
     abstract,
     session: { name, bgColor },
-    room: talkRoom,
-    day,
     date: talkDate,
     time,
     id: talkId,
@@ -42,6 +41,8 @@ function TalkDetails({ talks, onBookmarkToggle }) {
 
   const firstAuthor = authors[0];
   const coAuthors = ` ${authors.slice(1).join(", ")}`;
+
+  const talkRoom = getRoomBySlug(conferenceRooms, room);
 
   return (
     <>
@@ -98,7 +99,7 @@ function TalkDetails({ talks, onBookmarkToggle }) {
           <StyledSession style={{ background: bgColor }}>{name}</StyledSession>
           <InfoContainer>
             <li>{dateWithWeekday}</li>
-            <li>{talkRoom}</li>
+            <li>{talkRoom.name}</li>
             <li>{time}</li>
           </InfoContainer>
         </StyledArticle>

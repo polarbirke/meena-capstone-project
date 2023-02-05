@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import {
-  normalizeRooms,
   normalizeDate,
   dateFromNormalizedString,
 } from "../../../helpers/normalize";
+import {getRoomBySlug} from "../../../helpers/get";
 import styled from "styled-components";
 import Link from "next/link";
 import TalkCard from "../../../components/TalkCard";
@@ -21,18 +21,25 @@ import {
 
 function Room({ conferenceDays, conferenceRooms, talks, onBookmarkToggle }) {
   const router = useRouter();
-  const { date, room } = router.query;
+  const { date, room: roomSlug } = router.query;
   const pathname = router.asPath;
 
-  if (!room || !date) return;
+  if (!roomSlug || !date) return;
+
+  const currentRoom = getRoomBySlug(conferenceRooms, roomSlug);
+  const indexOfCurrentRoom = conferenceRooms.findIndex(room => room.slug === roomSlug);
+  const indexOfPrevRoom = indexOfCurrentRoom === 0 ? conferenceRooms.length - 1 : indexOfCurrentRoom - 1;
+  const indexOfNextRoom = indexOfCurrentRoom === conferenceRooms.length - 1 ? 0 : indexOfCurrentRoom + 1;
+  const prevRoomSlug = conferenceRooms[indexOfPrevRoom].slug;
+  const nextRoomSlug = conferenceRooms[indexOfNextRoom].slug;
 
   const conferenceDaysLinks = conferenceDays.map((day) => {
     return (
       <DateItem>
       <DateLink
         key={`${day}`}
-        href={`/${normalizeDate(day)}/${room}`}
-        active={pathname === `/${normalizeDate(day)}/${room}` ? 1 : 0}
+        href={`/${normalizeDate(day)}/${roomSlug}`}
+        active={pathname === `/${normalizeDate(day)}/${roomSlug}` ? 1 : 0}
       >
         <Weekday>
           {day
@@ -52,59 +59,28 @@ function Room({ conferenceDays, conferenceRooms, talks, onBookmarkToggle }) {
     );
   });
 
-  const indexOfCurrentRoom = conferenceRooms.map(normalizeRooms).indexOf(room);
-
-  function toTitleCase(str) {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map(function (word) {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      })
-      .join(" ");
-  }
-
-  const roomName = toTitleCase(room.replaceAll("-", " "));
-
-  const conferenceNextRoom = normalizeRooms(
-    conferenceRooms[
-      indexOfCurrentRoom === conferenceRooms.length - 1
-        ? 0
-        : indexOfCurrentRoom + 1
-    ]
-  );
-
-  const conferencePrevRoom = normalizeRooms(
-    conferenceRooms[
-      indexOfCurrentRoom === 0
-        ? conferenceRooms.length - 1
-        : indexOfCurrentRoom - 1
-    ]
-  );
-
   const filteredTalks = talks
     .filter((talk) => {
       const newDate = dateFromNormalizedString(talk.date);
       return normalizeDate(newDate) === date;
     })
-    .filter((talk) => normalizeRooms(talk.room) === room);
+    .filter((talk) => talk.room === currentRoom.id);
 
   return (
     <>
       <Header>{conferenceDaysLinks}</Header>
       <>
         <RoomHeadlineContainer>
-          <RoomHeadline>{roomName}</RoomHeadline>
+          <RoomHeadline>{currentRoom.name}</RoomHeadline>
         </RoomHeadlineContainer>
         <StyledMain>
           <StyledList>
             {filteredTalks.map((talk) => (
               <TalkCard
-                key={talk.id}
                 talk={talk}
                 onBookmarkToggle={onBookmarkToggle}
                 date={date}
-                room={room}
+                room={roomSlug}
               />
             ))}
           </StyledList>
@@ -112,7 +88,7 @@ function Room({ conferenceDays, conferenceRooms, talks, onBookmarkToggle }) {
       </>
 
       <FooterNav>
-        <FooterLink href={`/${date}/${conferencePrevRoom}`}>
+        <FooterLink href={`/${date}/${prevRoomSlug}`}>
           <PrevRoomIcon aria-label="previous room button" />
           <LinkText>Room</LinkText>
         </FooterLink>
@@ -124,7 +100,7 @@ function Room({ conferenceDays, conferenceRooms, talks, onBookmarkToggle }) {
           <BookmarkIcon />
           <LinkText>Bookmarks</LinkText>
         </FooterLink>
-        <FooterLink href={`/${date}/${conferenceNextRoom}`}>
+        <FooterLink href={`/${date}/${nextRoomSlug}`}>
           <NextRoomIcon aria-label="next room button" />
           <LinkText>Room</LinkText>
         </FooterLink>
