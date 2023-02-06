@@ -8,6 +8,7 @@ import {
 } from "../../../../components/StyledFooter";
 import styled from "styled-components";
 import { css } from "styled-components";
+import { VisuallyHidden } from "../../../../components/StyledVisuallyHidden";
 import { dateFromNormalizedString } from "../../../../helpers/normalize";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import {
@@ -48,17 +49,18 @@ function TalkDetails({ talks, onBookmarkToggle }) {
       <StyledMain>
         <StyledArticle>
           <IconWrapper>
-            <BackButton aria-label="back button" onClick={() => router.back()}>
+            <BackButton onClick={() => router.back()}>
               <CloseIcon />
+              <VisuallyHidden>Back</VisuallyHidden>
             </BackButton>
             <ToggleButton
-              aria-label="toggle bookmark button"
               type={"button"}
               onClick={() => {
                 onBookmarkToggle(talkId);
               }}
             >
               {isBookmarked ? <BookmarkActive /> : <BookmarkInactive />}
+              <VisuallyHidden>Toogle bookmark</VisuallyHidden>
             </ToggleButton>
           </IconWrapper>
           <StyledTitle>{title}</StyledTitle>

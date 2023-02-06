@@ -9,6 +9,7 @@ import Link from "next/link";
 import TalkCard from "../../../components/TalkCard";
 import StyledList from "../../../components/StyledList";
 import StyledMain from "../../../components/StyledMain";
+import { VisuallyHidden } from "../../../components/StyledVisuallyHidden";
 import {
   FooterNav,
   FooterLink,
@@ -113,8 +114,8 @@ function Room({ conferenceDays, conferenceRooms, talks, onBookmarkToggle }) {
 
       <FooterNav>
         <FooterLink href={`/${date}/${conferencePrevRoom}`}>
-          <PrevRoomIcon aria-label="previous room button" />
-          <LinkText>Room</LinkText>
+          <PrevRoomIcon />
+          <LinkText><VisuallyHidden>Go to previous</VisuallyHidden> Room</LinkText>
         </FooterLink>
         <FooterLink href={"/"}>
           <HomeIcon />
@@ -125,8 +126,8 @@ function Room({ conferenceDays, conferenceRooms, talks, onBookmarkToggle }) {
           <LinkText>Bookmarks</LinkText>
         </FooterLink>
         <FooterLink href={`/${date}/${conferenceNextRoom}`}>
-          <NextRoomIcon aria-label="next room button" />
-          <LinkText>Room</LinkText>
+          <NextRoomIcon />
+          <LinkText><VisuallyHidden>Go to next</VisuallyHidden> Room</LinkText>
         </FooterLink>
       </FooterNav>
     </>
